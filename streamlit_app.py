@@ -4,12 +4,13 @@ import pandas as pd
 import altair as alt
 
 @st.cache
-def load_data():
+def load_data(file):
     """
     Write 1-2 lines of code here to load the data from CSV to a pandas dataframe
     and return it.
     """
-    pass
+    return pd.read_csv(file)
+
 
 @st.cache
 def get_slice_membership(df, genders, races, educations, age_range):
@@ -68,8 +69,16 @@ def make_long_reason_dataframe(df, reason_prefix):
 
 st.title("Household Pulse Explorable")
 with st.spinner(text="Loading data..."):
-    df = load_data()
+    df = load_data("pulse39.csv")
+st.write(df)
+
 st.text("Visualize the overall dataset and some distributions here...")
+hist = alt.Chart(df).mark_bar().encode(
+    alt.X("income", bin=True),
+    alt.Y("expenses_difficulty"),
+    alt.Color("race")
+)
+st.write(hist)
 
 st.header("Custom slicing")
 st.text("Implement your interactive slicing tool here...")
